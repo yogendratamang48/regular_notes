@@ -160,3 +160,35 @@ Counter({'Bob': 1,
 - appendleft(), append()
 - popleft(), pop()
 - rotate()
+# 5. Advanced Python
+## Enumerations
+```
+In [28]: from enum import Enum                                                                                                         
+In [29]: class Fruit(Enum): 
+    ...:     APPLE = 1 
+    ...:     BANANA = 2 
+    ...:     ORANGE = 3 
+    ...:     TOMATO = 4 
+
+In [30]: print(Fruit.APPLE)                                                                                                            
+Fruit.APPLE
+
+In [31]: type(Fruit.APPLE)                                                                                                             
+Out[31]: <enum 'Fruit'>
+
+In [32]: repr(Fruit.APPLE)                                                                                                             
+Out[32]: '<Fruit.APPLE: 1>'
+
+In [33]: Fruit.APPLE.name                                                                                                              
+Out[33]: 'APPLE'
+
+In [34]: Fruit.APPLE.name, Fruit.APPLE.value                                                                                           
+Out[34]: ('APPLE', 1)
+```
+### Class Attribute functions
+- `.__getattribute__(self, attr)`
+--> to retrieve 
+- `.__getattr__(self, attr)`
+--> return dynamically return a value
+- `.__getattr__(self, attr)`
+- 
