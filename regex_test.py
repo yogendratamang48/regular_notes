@@ -72,7 +72,7 @@ def check_format(mode):
     '''
     filename = 'pass.txt'
     if mode.lower().strip() == 'ni':
-        filename = 'ni.txt'
+        filename = 'nis.txt'
     raw_passes = open(filename).read().split('\n')
     for i, raw_pass in enumerate(raw_passes):
         raw_pass_list = extract_list(raw_pass)
