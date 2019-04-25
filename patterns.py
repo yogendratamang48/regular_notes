@@ -293,11 +293,16 @@ regex_countries = [
     re.compile(r'(DPRK)'),
     re.compile(r"(Pakistani)"),
     re.compile(r"(Saudi Arabian)"),
-    re.compile(r"(Russian national)"),
+    re.compile(r"(Russian)"),
     re.compile(r"(Chinese)"),
     re.compile(r"(Afghan)"),
     re.compile(r"(Italian)"),
     re.compile(r"(Moroccan)"),
+    re.compile(r"(German)"),
+    re.compile(r"(US)"),
+    re.compile(r"(LIBYAN)"),
+    re.compile(r"(Filipino)"),
+    
 
 ]
 bad_name_map = {
@@ -366,6 +371,9 @@ bad_name_map = {
     "Sudanese": "Sudan",
     "Pakistani":"Pakistan",
     "Saudi Arabian": "Saudi Arabia",
-    "Russian national":"Russian Federation",
-    "Italian":"Italy"
+    "Russian":"Russian Federation",
+    "Italian":"Italy",
+    "German":"Germany",
+    "US": "United States of America",
+    "LIBYAN": "Libya",
 }

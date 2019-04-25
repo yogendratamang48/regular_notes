@@ -3,6 +3,6 @@
 [12,116,152]:missing issued date
 [58]:missing expiry date
 [20,155]:missing first character
-[120,145,147,148,149,150,152,153,154,155,156,157,158,160,161,164]:missing country
+//DONE [120,145,147,148,149,150,152,153,154,155,156,157,158,160,161,164]:missing country
 [62,125,130,131,146]:Extracted full text in number
 [132]:ambiguous number
