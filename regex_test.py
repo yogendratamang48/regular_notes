@@ -1,14 +1,22 @@
 import re
 import sys
 import json
+import csv
+from patterns import regex_countries, bad_name_map
+import pudb
 
+COUNTRIES = []
+with open('countries.csv', encoding='latin1') as f:
+    cf = csv.DictReader(f, fieldnames=['name', 'iso2', 'iso3'])
+    for row in cf:
+        COUNTRIES.append(row)
 LIST_NOISES = [
 '',
 'passport no', 
 'passport no',
-'bosnia and herzegovina passport number',
-'qatari passport number',
-'jordanian passport numbers',
+#'bosnia and herzegovina passport number',
+#'qatari passport number',
+#'jordanian passport numbers',
 ]
 def extract_passport(raw_string):
     '''
@@ -20,7 +28,7 @@ def extract_passport(raw_string):
         r'Code\s+(\w+)$',
         r'(?:^|\s+)([A-Z]+\d{2,}[A-Z]+?)',
         r'\w?\d{5,}\w?',
-        r'[N|n]umber:?\s([A-Z0-9\-]+)',
+        r'[N|n]umber:?\s?([A-Z0-9\-]+)',
             ]
     for pass_regex in pass_regexes:
         id_numbers = re.findall(pass_regex, raw_string)
@@ -47,11 +55,19 @@ def extract_list(raw_string):
             ]
     for _p in list_regexes:
         raw_list = re.split(_p, raw_string)
+        raw_list = [_ for _ in raw_list if _.strip()]
         if len(raw_list) > 1:
             break
+        else:
+            raw_list = []
     if not raw_list:
         # CAses of "4546454 and 56794730"
-        raw_list.append(raw_string)
+        _passes = re.findall(r'([A-Z\d]+) and ([A-Z\d]+)', raw_string)
+        if _passes:
+            raw_list.extend(list(_passes[0]))
+        else:
+            raw_list.append(raw_string)
+        
     for _item in raw_list:
         _raw = re.sub(r'\(\d{1}\)','',_item)
         if _raw.lower().strip() not in LIST_NOISES:
@@ -125,28 +141,56 @@ def check_format(mode):
     raw_passes = open(filename).read().split('\n')
     for i, raw_pass in enumerate(raw_passes):
         raw_pass_list = extract_list(raw_pass)
-        for raw_pass in raw_pass_list:
-            numbers = extract_passport(raw_pass)
+        # To handle "Bosnia and Herzegovina passport number: a) " cases
+        country_info = extract_country(raw_pass)
+        for _pass in raw_pass_list:
+            numbers = extract_passport(_pass)
+            #-- Extract Country
+            _country_info = extract_country(_pass)
             if numbers:
-                issue_date = extract_date(raw_pass)
-                expire_date = extract_date(raw_pass, mode="exp")
+                issue_date = extract_date(_pass)
+                expire_date = extract_date(_pass, mode="exp")
                 for number in numbers:
                     _id = {}
                     _id['type'] = 'pass'
                     _id['number'] = number
                     _id['issue_date'] = issue_date
                     _id['expire_date'] = expire_date
-                    _id['index'] = i
+                    _id['index'] = i+1
+                    if country_info:
+                        _id['country'] = country_info
                     yield _id
 
+def extract_country(_pass):
+    '''
+    '''
+    for regex in regex_countries:
+        match = regex.search(_pass)
+        if match:
+            _c = match.group(1)
+            c = _resolve_country(_c)
+            return c
+    return None
+
+
+def _resolve_country(input_str):
+    input_str = input_str.strip()
+    if  input_str is None or \
+        input_str in ['undetermined', "-"]:
+        return None
+    elif input_str in bad_name_map:
+        input_str = bad_name_map[input_str]
+    _c = [_ for _ in COUNTRIES if _['name'].lower().strip() == input_str.lower()]
+    if _c:
+        return _c[0]['name']
+    else:
+        print("Input str issue: ", input_str)
+    return None
 
 if __name__ == '__main__':
     '''
     '''
     for _id in check_format(sys.argv[1]):
-        print("====== ", (_id['index']+1))
+        print("====== ", (_id['index']))
         jdata = json.dumps(_id, ensure_ascii=False, indent=2)
         print(jdata)
-
-
-
