@@ -5,8 +5,9 @@
 [93,263,264,265]: Incomplete number, No country
 [128,133,156,157,161,162,163,164,166,173,198,199,200,205,238,239,256,268,269,270,272,275,276,279,281]: Missing first few characters of number
 [144]:Fields are not matched
-[171]:two numbers but extracted only one
+[171,59]:two numbers but extracted only one
 [174,175,223]:No issued date
 [187,276]:No expiry date
 [217]:Full Text extracted in number field
-[259,290]:Misplaced Country
+[259,290,208,256]:Misplaced Country
+//DONE [59,93,95,96,97,172,184,200,205,219,220,231,232,237,266,268,269,270,271,272,275,276,279,280,282,283,284,292,299,300,302]:No country
